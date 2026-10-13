@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PawMatch | Pet Matrimony & Soulmate Finder</title>
+  <meta name="description" content="Find the perfect soulmate for your furry, feathery, or cuddly best friends. Pet Matrimony made delightful, safe, and fun!">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header / Navigation -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="logo" id="navLogo">
+        <span class="logo-icon">🐾</span>
+        <span class="logo-text">Paw<span class="accent-text">Match</span></span>
+      </div>
+      <nav class="nav-links">
+        <a href="#discover" class="nav-link active" data-tab="discover">Explore Matrimony</a>
+        <a href="#tinderMode" class="nav-link" data-tab="swipes">Paw Swiper 💖</a>
+        <a href="#foodMatch" class="nav-link" data-tab="food">Pedigree Taste Matcher 🍖</a>
+        <a href="#favorites" class="nav-link" data-tab="favorites">Shortlisted (<span id="favCountBadge">0</span>)</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="btn btn-secondary" id="openAddPetModalBtn">
+          <span>+ Register Pet</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-glow"></div>
+    <div class="hero-content">
+      <div class="badge-pill">💍 Premium Pet Matrimony Service</div>
+      <h1 class="hero-title">Connecting Furry Hearts for <span class="gradient-text">A Lifetime of Tail Wags</span></h1>
+      <p class="hero-subtext">
+        Every loyal dog, graceful cat, and adorable pet deserves true companionship. Filter verified pet profiles with lineage details, lifestyle traits, and even their favorite <strong>Pedigree meal flavor</strong>!
+      </p>
+      <div class="hero-search-bar" id="heroSearchWrap">
+        <div class="search-input-group">
+          <label>Pet Species</label>
+          <select id="heroFilterSpecies">
+            <option value="All">All Species</option>
+            <option value="Dog">Dog 🐕</option>
+            <option value="Cat">Cat 🐈</option>
+            <option value="Rabbit">Rabbit 🐇</option>
+          </select>
+        </div>
+        <div class="divider-v"></div>
+        <div class="search-input-group">
+          <label>Gender / Looking for</label>
+          <select id="heroFilterGender">
+            <option value="All">Any Gender</option>
+            <option value="Male">Male ♂</option>
+            <option value="Female">Female ♀</option>
+          </select>
+        </div>
+        <div class="divider-v"></div>
+        <div class="search-input-group">
+          <label>Favorite Food / Pedigree</label>
+          <select id="heroFilterFood">
+            <option value="All">Any Favorite Flavor</option>
+            <option value="Chicken & Vegetables">Chicken & Vegetables 🍗</option>
+            <option value="Grilled Meat & Liver Loaf">Grilled Meat & Liver 🥩</option>
+            <option value="Salmon & Tuna Feast">Salmon & Tuna 🐟</option>
+            <option value="Puppy Milk & Rice">Milk & Soft Rice 🍼</option>
+            <option value="Organic Garden Crunch">Organic Garden Crunch 🥕</option>
+            <option value="Lamb & Rice Stew">Lamb & Rice Stew 🍲</option>
+          </select>
+        </div>
+        <button class="btn btn-primary hero-btn" id="heroApplyBtn">
+          <span>Find Matches</span> 🐾
+        </button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item"><strong>2,400+</strong> Happy Barking Pairs</div>
+        <div class="stat-dot">•</div>
+        <div class="stat-item"><strong>100%</strong> Verified Pet Parents</div>
+        <div class="stat-dot">•</div>
+        <div class="stat-item"><strong>🍖 Flavor</strong> Matched Chemistry</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main App Container -->
+  <main class="main-content">
+    
+    <!-- View 1: Explore & Grid View -->
+    <section id="section-discover" class="app-tab-section active">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Eligible Pet Bachelors & Bachelorettes</h2>
+          <p class="section-subtitle">Browse comprehensive biodatas with detailed pedigree traits & loving parent contacts</p>
+        </div>
+        <div class="view-controls">
+          <input type="text" id="searchInput" placeholder="Search by name, breed, or city..." class="text-search-input">
+          <button class="btn btn-outline" id="resetFiltersBtn">Reset Filters</button>
+        </div>
+      </div>
+
+      <!-- Quick Filter Chips -->
+      <div class="filter-chips-row">
+        <span class="chips-label">Quick Food Match:</span>
+        <button class="chip-btn active" data-food="All">All Delicacies</button>
+        <button class="chip-btn" data-food="Chicken & Vegetables">Chicken & Veg 🍗</button>
+        <button class="chip-btn" data-food="Grilled Meat & Liver Loaf">Grilled Meat & Liver 🥩</button>
+        <button class="chip-btn" data-food="Salmon & Tuna Feast">Salmon & Tuna 🐟</button>
+        <button class="chip-btn" data-food="Puppy Milk & Rice">Milk & Rice 🍼</button>
+        <button class="chip-btn" data-food="Organic Garden Crunch">Organic Veggies 🥕</button>
+      </div>
+
+      <!-- Pet Cards Grid -->
+      <div class="pet-grid" id="petGridContainer">
+        <!-- Cards injected dynamically by JS -->
+      </div>
+      
+      <!-- Empty state when no pet matches -->
+      <div id="noMatchState" class="empty-state hidden">
+        <div class="empty-icon">🐶🔍</div>
+        <h3>No fur-mate found with those filters!</h3>
+        <p>Try broadening your search or resetting your culinary taste criteria.</p>
+        <button class="btn btn-secondary" onclick="document.getElementById('resetFiltersBtn').click()">Show All Pets</button>
+      </div>
+    </section>
+
+    <!-- View 2: Interactive Swiper (Tinder-style Paw Match) -->
+    <section id="section-swipes" class="app-tab-section hidden">
+      <div class="swiper-wrapper">
+        <div class="swiper-intro">
+          <h2>Paw Swiper 💖 Fast Matrimony Match</h2>
+          <p>Swipe right to shortlist, swipe left to pass, or use the interactive food compatibility test!</p>
+        </div>
+        
+        <div class="card-stack-container" id="cardStackArea">
+          <!-- Active Swipe Card -->
+          <div class="swipe-card" id="activeSwipeCard">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <div class="swipe-controls">
+          <button class="swipe-action-btn dislike" id="btnSwipePass" title="Pass">✕</button>
+          <button class="swipe-action-btn info-btn" id="btnSwipeDetail" title="View Biodata">ℹ️</button>
+          <button class="swipe-action-btn like" id="btnSwipeLove" title="Propose Matrimony">❤️</button>
+        </div>
+        <p class="swipe-tip">Keyboard shortcuts: <strong>[←]</strong> Pass &nbsp;|&nbsp; <strong>[→]</strong> Like & Shortlist</p>
+      </div>
+    </section>
+
+    <!-- View 3: Pedigree Food Compatibility Matchmaker -->
+    <section id="section-food" class="app-tab-section hidden">
+      <div class="food-matcher-box">
+        <div class="food-matcher-header">
+          <span class="food-icon-banner">🍖 🥣 🐾</span>
+          <h2>The "Pedigree Taste Compatibility" Engine</h2>
+          <p>Food chemistry is pet soul chemistry! Choose your pet's top gourmet preference to discover companions with matching appetite and dining harmony.</p>
+        </div>
+
+        <div class="food-selector-grid" id="foodSelectorGrid">
+          <div class="food-choice-card" data-dish="Chicken & Vegetables">
+            <div class="food-icon">🍗</div>
+            <h3>Pedigree Classic Chicken</h3>
+            <p>Tender chicken breast stewed with peas & sweet farm carrots</p>
+            <span class="taste-badge">High Energy & Playful</span>
+          </div>
+          <div class="food-choice-card" data-dish="Grilled Meat & Liver Loaf">
+            <div class="food-icon">🥩</div>
+            <h3>Grilled Beef & Liver Loaf</h3>
+            <p>Savory steak chunks packed with rich protein for royal barks</p>
+            <span class="taste-badge">Bold & Athletic</span>
+          </div>
+          <div class="food-choice-card" data-dish="Salmon & Tuna Feast">
+            <div class="food-icon">🐟</div>
+            <h3>Ocean Salmon & Tuna</h3>
+            <p>Omega-rich ocean fish recipe for silky glossy coats & calm vibes</p>
+            <span class="taste-badge">Graceful & Cuddly</span>
+          </div>
+          <div class="food-choice-card" data-dish="Puppy Milk & Rice">
+            <div class="food-icon">🍼</div>
+            <h3>Nutritious Milk & Tender Rice</h3>
+            <p>Gentle on young digestion, comforting & creamy delight</p>
+            <span class="taste-badge">Sweet & Gentle</span>
+          </div>
+          <div class="food-choice-card" data-dish="Organic Garden Crunch">
+            <div class="food-icon">🥕</div>
+            <h3>Garden Veggie & Herb Crunch</h3>
+            <p>Crispy green beans, crisp apples, and fresh farm oats</p>
+            <span class="taste-badge">Vegan Lover & Curious</span>
+          </div>
+          <div class="food-choice-card" data-dish="Lamb & Rice Stew">
+            <div class="food-icon">🍲</div>
+            <h3>Pedigree Savory Lamb Stew</h3>
+            <p>Slow-simmered Australian lamb with wild brown rice</p>
+            <span class="taste-badge">Noble & Courteous</span>
+          </div>
+        </div>
+
+        <!-- Food Match Results -->
+        <div id="foodMatchResultsContainer" class="food-results-wrap">
+          <h3 id="foodResultTitle">Select a Pedigree delicacy above to find matching soulmates!</h3>
+          <div class="pet-grid" id="foodMatchGrid"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- View 4: Shortlisted / Favorites View -->
+    <section id="section-favorites" class="app-tab-section hidden">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Your Shortlisted Matches 💌</h2>
+          <p class="section-subtitle">Profiles you have liked and prospective matrimony connections</p>
+        </div>
+      </div>
+      <div class="pet-grid" id="favoritesGridContainer">
+        <!-- Rendered by JS -->
+      </div>
+      <div id="emptyFavorites" class="empty-state">
+        <div class="empty-icon">💖</div>
+        <h3>No shortlisted pets yet!</h3>
+        <p>Explore the matrimony catalog or swipe right on profiles that win your heart.</p>
+        <button class="btn btn-primary" onclick="window.switchTab('discover')">Browse Pets</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Complete Matrimony Biodata Modal -->
+  <div class="modal-backdrop" id="biodataModal">
+    <div class="modal-card modal-lg">
+      <button class="modal-close" id="closeBiodataBtn">&times;</button>
+      <div class="modal-body" id="biodataModalContent">
+        <!-- Injected dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Register Pet Modal -->
+  <div class="modal-backdrop" id="addPetModal">
+    <div class="modal-card">
+      <button class="modal-close" id="closeAddPetModalBtn">&times;</button>
+      <div class="modal-header">
+        <h2>🐾 Register Pet for Matrimony</h2>
+        <p>Create a verified biodata for your beloved companion</p>
+      </div>
+      <form id="addPetForm" class="add-pet-form">
+        <div class="form-section-title">1. Basic Pet Identity</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Pet's Full Name *</label>
+            <input type="text" id="regName" placeholder="e.g. Leo, Bella" required>
+          </div>
+          <div class="form-group">
+            <label>Species *</label>
+            <select id="regSpecies" required>
+              <option value="Dog">Dog 🐕</option>
+              <option value="Cat">Cat 🐈</option>
+              <option value="Rabbit">Rabbit 🐇</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Breed *</label>
+            <input type="text" id="regBreed" placeholder="e.g. Golden Retriever, Persian" required>
+          </div>
+          <div class="form-group">
+            <label>Sex *</label>
+            <select id="regSex" required>
+              <option value="Male">Male ♂</option>
+              <option value="Female">Female ♀</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row three-col">
+          <div class="form-group">
+            <label>Age *</label>
+            <input type="text" id="regAge" placeholder="e.g. 2.5 Years" required>
+          </div>
+          <div class="form-group">
+            <label>Height *</label>
+            <input type="text" id="regHeight" placeholder="e.g. 22 inches" required>
+          </div>
+          <div class="form-group">
+            <label>Weight *</label>
+            <input type="text" id="regWeight" placeholder="e.g. 28 kg" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>City & State *</label>
+            <input type="text" id="regCity" placeholder="e.g. San Francisco, CA or Mumbai" required>
+          </div>
+          <div class="form-group">
+            <label>Photo URL (Optional)</label>
+            <input type="url" id="regPhoto" placeholder="Paste image link or leave blank for auto-avatar">
+          </div>
+        </div>
+
+        <div class="form-section-title">2. Gastronomy & Pedigree Preference</div>
+        <div class="form-group">
+          <label>Favorite Food / Pedigree Flavor *</label>
+          <select id="regFood" required>
+            <option value="Chicken & Vegetables">Pedigree Chicken & Vegetables 🍗</option>
+            <option value="Grilled Meat & Liver Loaf">Pedigree Grilled Meat & Liver Loaf 🥩</option>
+            <option value="Salmon & Tuna Feast">Pedigree Salmon & Tuna Feast 🐟</option>
+            <option value="Puppy Milk & Rice">Pedigree Nutritious Milk & Rice 🍼</option>
+            <option value="Organic Garden Crunch">Organic Garden Veggies 🥕</option>
+            <option value="Lamb & Rice Stew">Pedigree Lamb & Rice Stew 🍲</option>
+          </select>
+        </div>
+
+        <div class="form-section-title">3. Personality & Lifestyle</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Personality Traits (Comma separated)</label>
+            <input type="text" id="regPersonality" placeholder="e.g. Friendly, Cuddle Monster, Playful" required>
+          </div>
+          <div class="form-group">
+            <label>Lifestyle & Habits</label>
+            <input type="text" id="regLifestyle" placeholder="e.g. Morning runner, Loves fetch, Couch napper" required>
+          </div>
+        </div>
+
+        <div class="form-section-title">4. Pet Parent / Guardian Contact</div>
+        <div class="form-row three-col">
+          <div class="form-group">
+            <label>Parent Name *</label>
+            <input type="text" id="regParentName" placeholder="e.g. Sarah Jenkins" required>
+          </div>
+          <div class="form-group">
+            <label>Phone Contact *</label>
+            <input type="tel" id="regParentPhone" placeholder="+1 (555) 349-2041" required>
+          </div>
+          <div class="form-group">
+            <label>Email *</label>
+            <input type="email" id="regParentEmail" placeholder="parent@email.com" required>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-outline" id="cancelAddPetBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Publish Matrimony Profile 💖</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Matchmaker Success Celebration Modal -->
+  <div class="modal-backdrop" id="matchSuccessModal">
+    <div class="modal-card modal-celebration">
+      <div class="sparkles-decor">✨ 💖 🐾 💍 🐶 🐱 ✨</div>
+      <h2 class="celebrate-title">It's a Matrimony Match!</h2>
+      <p class="celebrate-sub">A proposal request has been dispatched to the pet parent!</p>
+      
+      <div class="matched-pair-preview">
+        <div class="pair-circle" id="pairLeftPet">🐾</div>
+        <div class="heart-pulse">❤️</div>
+        <div class="pair-circle" id="pairRightPet">🐾</div>
+      </div>
+
+      <div class="food-toast" id="matchFoodToast">
+        Both share an exquisite taste for <strong>Pedigree Chicken & Veg</strong>!
+      </div>
+
+      <div class="celebrate-actions">
+        <button class="btn btn-primary" id="celebrateCloseBtn">Send Wedding Blessings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toastNotification" class="toast">Profile updated!</div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <div class="logo">
+          <span class="logo-icon">🐾</span>
+          <span class="logo-text">Paw<span class="accent-text">Match</span></span>
+        </div>
+        <p>The world's happiest pet matrimony portal. Helping pets discover companionship, health, and pedigree compatibility since 2024.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Matching Services</h4>
+        <a href="#discover">Pedigree Verification</a>
+        <a href="#foodMatch">Culinary Compatibility</a>
+        <a href="#tinderMode">Speed Paw-Swiper</a>
+      </div>
+      <div class="footer-col">
+        <h4>Pet Parent Trust</h4>
+        <a href="#">Health & Genetic Checks</a>
+        <a href="#">Parent Identity Proof</a>
+        <a href="#">Matrimony Guidelines</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 PawMatch Matrimony Inc. Crafted with boundless love & treats 🦴</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
